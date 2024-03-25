@@ -1,6 +1,6 @@
 # Multimodal N-of-1 Trials Image Generation
 
-This project aims to generate synthetic identity-preserving images to simulate multimodal N-of-1 trials. We fine-tune Stable Diffusion models using DreamBooth and LoRA techniques to create personalized models capable of generating images for specific subjects or conditions. This README provides an overview of the project setup, including the training scripts for fine-tuning the models and generating new images.
+This project aims to generate synthetic identity-preserving images to simulate multimodal N-of-1 trials as part of the Advanced Machine Learning Seminar at the Hasso-Plattner Institute (HPI) in Potsdam. We fine-tune Stable Diffusion models using DreamBooth and LoRA techniques to create personalized models capable of generating images for different acne severity levels. This README provides an overview of the project setup, including the training scripts for fine-tuning the models and generating new synthetic images. All of the included scripts should be able to run using a free tier Kaggle account.
 
 ![overview.png](overview.png)
 
@@ -14,13 +14,14 @@ The project includes training scripts and corresponding model weights located in
 - `acne3_LoRA_filtered_all`
 - `acne_sd1.5_fast-dreambooth_filtered_small`
 
-Each directory contains a script for fine-tuning a Stable Diffusion model on a specific dataset related to acne severity or other conditions for N-of-1 trials.
-The models weights can also be found online on Kaggle:
+Each directory contains a script for fine-tuning a Stable Diffusion model on a filtered version of the [ACNE04](https://github.com/xpwu95/ldl) dataset related to acne severity for multimodal N-of-1 trials, resulting in one fine tuned SDXL model for each of the four acne severity levels (mild, moderate, severe and very severe).
+The models weights and the modified version of ACNE04 can also be found online on HuggingFace:
 - https://huggingface.co/ManuelHettich/acne0_LoRA_filtered_all
 - https://huggingface.co/ManuelHettich/acne1_LoRA_filtered_all
 - https://huggingface.co/ManuelHettich/acne2_LoRA_filtered_all
 - https://huggingface.co/ManuelHettich/acne3_LoRA_filtered_all
 - https://huggingface.co/ManuelHettich/acne_sd1.5_fast-dreambooth_filtered_small
+- https://huggingface.co/datasets/ManuelHettich/acne04
 
 ## Training Scripts Overview
 
@@ -32,6 +33,13 @@ We use a Kaggle Notebook to fine-tune Stable Diffusion XL (SDXL) models using Dr
   - [Stable Diffusion XL Fine-tuning Guide](https://huggingface.co/docs/diffusers/main/en/using-diffusers/sdxl)
   - [DreamBooth Training Documentation](https://huggingface.co/docs/diffusers/main/en/training/dreambooth)
   - [LoRA Training Documentation](https://huggingface.co/docs/diffusers/main/en/training/lora)
+  - https://github.com/huggingface/notebooks/blob/main/diffusers/SDXL_DreamBooth_LoRA_.ipynb
+    - https://colab.research.google.com/github/huggingface/notebooks/blob/main/diffusers/SDXL_DreamBooth_LoRA_.ipynb
+  - https://github.com/huggingface/notebooks/blob/main/diffusers/SDXL_Dreambooth_LoRA_advanced_example.ipynb
+  - https://github.com/huggingface/diffusers/blob/main/docs/source/en/using-diffusers/sdxl.md
+  - https://github.com/huggingface/diffusers/blob/main/examples/dreambooth/README_sdxl.md
+  - https://github.com/huggingface/diffusers/blob/main/docs/source/en/using-diffusers/sdxl.md#image-to-image
+  - https://github.com/huggingface/notebooks/blob/main/diffusers/image_2_image_using_diffusers.ipynb
 
 ### Training Script for SD1.5 using DreamBooth
 
@@ -39,6 +47,7 @@ For SD1.5, we utilize a Colab Pro notebook to train the model using DreamBooth o
 
 - **Resources**:
   - [Fast Stable Diffusion on GitHub](https://github.com/TheLastBen/fast-stable-diffusion)
+  - https://colab.research.google.com/github/TheLastBen/fast-stable-diffusion/blob/main/fast-DreamBooth.ipynb
 
 ### Getting Started
 
@@ -49,17 +58,11 @@ For SD1.5, we utilize a Colab Pro notebook to train the model using DreamBooth o
 
 ## Inference and Simulation of Multimodal N-of-1 Trials
 
-After fine-tuning the Stable Diffusion models to generate identity-preserving images for multimodal N-of-1 trials, we provide an inference script `sdxl-dreambooth-lora-inference.ipynb` located in the `inference` folder. This script is designed to use the fine-tuned models to simulate a trial with 10 patients, each having 140 generated images, demonstrating the efficacy and personalized capability of the models in a clinical or research setting.
+After fine-tuning the Stable Diffusion models to generate identity-preserving images for multimodal N-of-1 trials, we provide an inference script `sdxl-dreambooth-lora-inference.ipynb` located in the `inference` folder. This script is designed to use the fine-tuned models to simulate a trial with 10 patients, each having 140 generated images, demonstrating the efficacy and personalized capability of the models in a clinical or research setting. It uses a random image with the lowest acne severity level from the [ACNE04](https://github.com/xpwu95/ldl) dataset as input for the img2img inference with the following parameters: strength=0.1, guidance_scale=12. Please note that the inference might not work well with an input image outside of the original data distribution in [ACNE04](https://github.com/xpwu95/ldl).
 
 ### Inference Script Overview
 
-The `sdxl-dreambooth-lora-inference.ipynb` script automates the generation of images based on the fine-tuned models. It leverages a dataset of pre-defined conditions to simulate an N-of-1 trial environment, showcasing how the models can be applied to generate personalized images under specific clinical conditions or treatments.
-
-#### Features:
-
-- **Automated Image Generation:** Generates images for each patient in the trial, simulating different conditions or time points.
-- **Customizable Conditions:** Utilizes a CSV file to define patient-specific conditions, allowing for a wide range of simulations.
-- **Efficient Processing:** Optimized for performance, enabling the processing of multiple patients and conditions in a streamlined manner.
+The `sdxl-dreambooth-lora-inference.ipynb` script automates the generation of images based on the fine-tuned models. It uses the input file `inference/sim_acne.csv` to generate a collection of identity-preserving images with varying levels of acne severity.
 
 #### Dataset:
 
